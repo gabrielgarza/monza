@@ -1,8 +1,9 @@
 # Monza
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/monza`. To experiment with that code, run `bin/console` for an interactive prompt.
+Monza is a ruby gem that makes App Store in app purchase receipt validation easy.
 
-TODO: Delete this and the text above, and describe your gem
+You should always validate receipts on the server, in [Apple's words] (https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html#//apple_ref/doc/uid/TP40010573-CH104-SW1):
+> Use a trusted server to communicate with the App Store. Using your own server lets you design your app to recognize and trust only your server, and lets you ensure that your server connects with the App Store server. It is not possible to build a trusted connection between a user’s device and the App Store directly because you don’t control either end of that connection.
 
 ## Installation
 
