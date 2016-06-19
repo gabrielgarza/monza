@@ -26,7 +26,7 @@ Or install it yourself as:
 
 data = "base64 receipt data string"
 options = { shared_secret: "your shared secret" }
-response = Monza.verify(data, options)
+response = Monza::Receipt.verify(data, options)
 
 # Check if subscription is active
 # this checks if latest transaction receipt expiry_date is in today or the future
