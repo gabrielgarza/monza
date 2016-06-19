@@ -24,13 +24,23 @@ module Monza
       @latest_receipt = attributes['latest_receipt']
     end
 
+    def is_subscription_active?
+      if @latest_receipt_info.last
+        @latest_receipt_info.last.expires_date >= Date.today
+      else
+        false
+      end
+    end
+
+    def latest_expiry_date
+        @latest_receipt_info.last.expires_date if @latest_receipt_info.last
+    end
+
     class VerificationError < StandardError
       attr_accessor :code
-      attr_accessor :receipt
 
-      def initialize(code, receipt)
+      def initialize(code)
         @code = Integer(code)
-        @receipt = receipt
       end
 
       def message
@@ -55,6 +65,7 @@ module Monza
             "Unknown Error: #{@code}"
         end
       end
+    end # end VerificationError
 
   end # class
 end # module
