@@ -23,6 +23,7 @@ Or install it yourself as:
 
 ## Usage
 
+Basic Usage:
 ```ruby
 
 data = "base64 receipt data string"
@@ -36,7 +37,27 @@ response.is_subscription_active? # => true or false
 # Check most recent expiry date
 response.latest_expiry_date # => DateTime
 
+# Receipt object
+# See Receipt class
+response.receipt
+
+# Receipt In App Transactions
+# Returns array of TransactionReceipt objects, see TransactionReceipt class
+response.receipt.in_app
+
+# Receipt Latest Transactions List, use these instead if in_app to ensure you always have the latest
+# Returns array of TransactionReceipt objects, see TransactionReceipt class
+response.latest_receipt_info
+
+# Latest receipt base64 string
+response.latest_receipt
+
+
 ```
+
+
+
+
 
 ## Development
 
@@ -47,6 +68,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/gabrielgarza/monza. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+
+TODO:
+- Need help with testing using rspec
 
 
 ## License
