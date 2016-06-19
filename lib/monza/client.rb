@@ -3,37 +3,40 @@ require 'net/https'
 require 'uri'
 
 module Monza
-  PRODUCTION_VERIFICATION_ENDPOINT = "https://buy.itunes.apple.com/verifyReceipt"
-  DEVELOPMENT_VERIFICATION_ENDPOINT = "https://sandbox.itunes.apple.com/verifyReceipt"
   class Client
     attr_accessor :verification_url
     attr_writer :shared_secret
 
+    PRODUCTION_URL = "https://buy.itunes.apple.com/verifyReceipt"
+    DEVELOPMENT_URL = "https://sandbox.itunes.apple.com/verifyReceipt"
+
     def self.development
       client = self.new
-      client.verification_url = ITUNES_DEVELOPMENT_RECEIPT_VERIFICATION_ENDPOINT
+      client.verification_url = PRODUCTION_URL
       client
     end
 
     def self.production
       client = self.new
-      client.verification_url = ITUNES_PRODUCTION_RECEIPT_VERIFICATION_ENDPOINT
+      client.verification_url = DEVELOPMENT_URL
       client
     end
 
     def initialize
     end
 
-    def verify(data)
-      json_response = post_receipt_verification(data)
-
-      status = json_response.status.to_i
+    def verify(data, options = {})
+      # Post to apple and receive json_response
+      json_response = post_receipt_verification(data, options)
+      # Get status code of response
+      status = json_response['status'].to_i
 
       case status
       when 0
         return VerificationResponse.new(json_response)
       else
-        raise VerificationResponse::VerificationError.new(status, receipt)
+        puts status
+        raise VerificationResponse::VerificationError.new(status)
       end
 
     end
@@ -45,7 +48,7 @@ module Monza
         'receipt-data' => data
       }
 
-      parameters['password'] = options['shared_secret'] if options['shared_secret']
+      parameters['password'] = options[:shared_secret] if options[:shared_secret]
 
       uri = URI(@verification_url)
       http = Net::HTTP.new(uri.host, uri.port)
