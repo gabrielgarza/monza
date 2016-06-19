@@ -23,8 +23,18 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
+
 data = "base64 receipt data string"
-Monza.verify(data,{shared_secret: "your shared secret"})
+options = { shared_secret: "your shared secret" }
+response = Monza.verify(data, options)
+
+# Check if subscription is active
+# this checks if latest transaction receipt expiry_date is in today or the future
+response.is_subscription_active? # => true or false
+
+# Check most recent expiry date
+response.latest_expiry_date # => DateTime
+
 ```
 
 ## Development
