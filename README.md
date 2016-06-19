@@ -1,6 +1,6 @@
 # Monza
 
-Monza is a ruby gem that makes App Store in app purchase receipt validation easy.
+Monza is a ruby gem that makes App Store in app purchase receipt validation and auto-renewable subscription validation easy.
 
 You should always validate receipts on the server, in [Apple's words] (https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html#//apple_ref/doc/uid/TP40010573-CH104-SW1):
 > Use a trusted server to communicate with the App Store. Using your own server lets you design your app to recognize and trust only your server, and lets you ensure that your server connects with the App Store server. It is not possible to build a trusted connection between a user’s device and the App Store directly because you don’t control either end of that connection.
