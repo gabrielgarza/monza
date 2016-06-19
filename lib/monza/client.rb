@@ -12,13 +12,13 @@ module Monza
 
     def self.development
       client = self.new
-      client.verification_url = PRODUCTION_URL
+      client.verification_url = DEVELOPMENT_URL
       client
     end
 
     def self.production
       client = self.new
-      client.verification_url = DEVELOPMENT_URL
+      client.verification_url = PRODUCTION_URL
       client
     end
 
