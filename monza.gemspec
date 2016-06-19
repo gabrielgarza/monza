@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Validate In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
   spec.description   = %q{Validate In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/gabrielgarza/monza"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
