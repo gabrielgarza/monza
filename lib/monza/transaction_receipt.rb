@@ -1,7 +1,7 @@
 require 'time'
 
 module Monza
-  class Receipt
+  class TransactionReceipt
     # Receipt Fields Documentation
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html#//apple_ref/doc/uid/TP40010573-CH106-SW1
 
@@ -27,12 +27,12 @@ module Monza
       @product_id = attributes['product_id']
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
-      @purchase_date = DateTime.parse(attributes['purchase_date'])
+      @purchase_date = DateTime.parse(attributes['purchase_date']) if attributes['purchase_date']
       @purchase_date_ms = Time.at(attributes['purchase_date_ms'].to_i / 1000).to_datetime
-      @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst'])
-      @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
+      @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst']) if attributes['purchase_date_pst']
+      @original_purchase_date = DateTime.parse(attributes['original_purchase_date']) if attributes['original_purchase_date']
       @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).to_datetime
-      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'])
+      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst']) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
       if attributes['expires_date']
@@ -48,6 +48,15 @@ module Monza
         @is_trial_period = attributes['is_trial_period']
       end
     end # end initialize
+
+    def is_renewal?
+      !is_first_transaction?
+    end
+
+    def is_first_transaction?
+      @original_transaction_id == @transaction_id
+    end
+
 
   end # end class
 end # end module
