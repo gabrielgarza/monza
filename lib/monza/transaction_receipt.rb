@@ -45,7 +45,7 @@ module Monza
         @expires_date_pst = DateTime.parse(attributes['expires_date_pst'])
       end
       if attributes['is_trial_period']
-        @is_trial_period = attributes['is_trial_period']
+        @is_trial_period = attributes['is_trial_period'].to_bool
       end
     end # end initialize
 
@@ -66,7 +66,7 @@ end # end module
 #
 #       {
 #         "quantity": "1",
-#         "product_id": "com.everlance.everlance.pro.monthly.test",
+#         "product_id": "product_id",
 #         "transaction_id": "1000000218147651",
 #         "original_transaction_id": "1000000218147500",
 #         "purchase_date": "2016-06-17 01:32:28 Etc/GMT",
