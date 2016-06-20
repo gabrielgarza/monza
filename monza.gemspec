@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Gabriel Garza"]
   spec.email         = ["garzagabriel@gmail.com"]
 
-  spec.summary       = %q{Validate In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
-  spec.description   = %q{Validate In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
+  spec.summary       = %q{Validate iTunes In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
+  spec.description   = %q{Validate iTunes In-App purchase receipts, including auto-renewable subscriptions, with the App Store.}
   spec.homepage      = "https://github.com/gabrielgarza/monza"
   spec.license       = "MIT"
 
