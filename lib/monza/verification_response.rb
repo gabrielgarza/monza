@@ -97,7 +97,7 @@ end # module
 #     "in_app": [
 #       {
 #         "quantity": "1",
-#         "product_id": "com.everlance.everlance.pro.monthly.test",
+#         "product_id": "product_id",
 #         "transaction_id": "1000000218147651",
 #         "original_transaction_id": "1000000218147500",
 #         "purchase_date": "2016-06-17 01:32:28 Etc/GMT",
@@ -117,7 +117,7 @@ end # module
 #   "latest_receipt_info": [
 #     {
 #       "quantity": "1",
-#       "product_id": "com.everlance.everlance.pro.monthly.test",
+#       "product_id": "product_id",
 #       "transaction_id": "1000000218147500",
 #       "original_transaction_id": "1000000218147500",
 #       "purchase_date": "2016-06-17 01:27:28 Etc/GMT",
