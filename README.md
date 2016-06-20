@@ -1,6 +1,6 @@
 # Monza
 
-Monza is a ruby gem that makes App Store in app purchase receipt validation and auto-renewable subscription validation easy.
+Monza is a ruby gem that makes iTunes App Store in app purchase receipt validation and auto-renewable subscription validation easy.
 
 You should always validate receipts on the server, in [Apple's words] (https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html#//apple_ref/doc/uid/TP40010573-CH104-SW1):
 > Use a trusted server to communicate with the App Store. Using your own server lets you design your app to recognize and trust only your server, and lets you ensure that your server connects with the App Store server. It is not possible to build a trusted connection between a user’s device and the App Store directly because you don’t control either end of that connection.
@@ -23,20 +23,29 @@ Or install it yourself as:
 
 ## Usage
 
-Basic Usage:
+##### Basic Usage:
 ```ruby
 
 data = "base64 receipt data string"
 options = { shared_secret: "your shared secret" }
 response = Monza::Receipt.verify(data, options)
 
+```
+
+##### Useful Methods
+```ruby
 # Check if subscription is active
 # this checks if latest transaction receipt expiry_date is in today or the future
 response.is_subscription_active? # => true or false
 
 # Check most recent expiry date
-response.latest_expiry_date # => DateTime
+# DateTime
+response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 +0000
 
+```
+
+##### Response Objects
+```ruby
 # Receipt object
 # See Receipt class
 response.receipt
@@ -47,11 +56,108 @@ response.receipt.in_app
 
 # Receipt Latest Transactions List, use these instead if in_app to ensure you always have the latest
 # Returns array of TransactionReceipt objects, see TransactionReceipt class
-response.latest_receipt_info
+response.latest_receipt_info # => Array of TransactionReceipt objects
+
+# Expires date of a transaction
+# DateTime
+response.latest_receipt_info.last.expires_date => # Fri, 17 Jun 2016 01:57:28 +0000
+
+# Check if latest transaction was trial period
+response.latest_receipt_info.last.is_trial_period # => true or false
 
 # Latest receipt base64 string
 response.latest_receipt
 
+```
+
+##### Sample JSON Response Schema
+```json
+
+{
+  "status": 0,
+  "environment": "Sandbox",
+  "receipt": {
+    "receipt_type": "ProductionSandbox",
+    "adam_id": 0,
+    "app_item_id": 0,
+    "bundle_id": "your_product_id",
+    "application_version": "58",
+    "download_id": 0,
+    "version_external_identifier": 0,
+    "receipt_creation_date": "2016-06-17 01:54:26 Etc/GMT",
+    "receipt_creation_date_ms": "1466128466000",
+    "receipt_creation_date_pst": "2016-06-16 18:54:26 America/Los_Angeles",
+    "request_date": "2016-06-17 17:34:41 Etc/GMT",
+    "request_date_ms": "1466184881174",
+    "request_date_pst": "2016-06-17 10:34:41 America/Los_Angeles",
+    "original_purchase_date": "2013-08-01 07:00:00 Etc/GMT",
+    "original_purchase_date_ms": "1375340400000",
+    "original_purchase_date_pst": "2013-08-01 00:00:00 America/Los_Angeles",
+    "original_application_version": "1.0",
+    "in_app": [
+      {
+        "quantity": "1",
+        "product_id": "product_id",
+        "transaction_id": "1000000218147651",
+        "original_transaction_id": "1000000218147500",
+        "purchase_date": "2016-06-17 01:32:28 Etc/GMT",
+        "purchase_date_ms": "1466127148000",
+        "purchase_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
+        "original_purchase_date": "2016-06-17 01:30:33 Etc/GMT",
+        "original_purchase_date_ms": "1466127033000",
+        "original_purchase_date_pst": "2016-06-16 18:30:33 America/Los_Angeles",
+        "expires_date": "2016-06-17 01:37:28 Etc/GMT",
+        "expires_date_ms": "1466127448000",
+        "expires_date_pst": "2016-06-16 18:37:28 America/Los_Angeles",
+        "web_order_line_item_id": "1000000032727764",
+        "is_trial_period": "false"
+      }
+    ]
+  },
+  "latest_receipt_info": [
+    {
+      "quantity": "1",
+      "product_id": "product_id",
+      "transaction_id": "1000000218147500",
+      "original_transaction_id": "1000000218147500",
+      "purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+      "purchase_date_ms": "1466126848000",
+      "purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+      "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+      "original_purchase_date_ms": "1466126848000",
+      "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+      "expires_date": "2016-06-17 01:32:28 Etc/GMT",
+      "expires_date_ms": "1466127148000",
+      "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
+      "web_order_line_item_id": "1000000032727765",
+      "is_trial_period": "true"
+    }
+  ],
+  "latest_receipt": "base 64 string"
+}
+
+```
+
+##### TransactionReceipt Object
+An array TransactionReceipt objects will come inside the `receipt.in_app` and `latest_receipt_info` keys of the `response`
+```json
+{
+  "quantity": "1",
+  "product_id": "product_id",
+  "transaction_id": "1000000218147500",
+  "original_transaction_id": "1000000218147500",
+  "purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+  "purchase_date_ms": "1466126848000",
+  "purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+  "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+  "original_purchase_date_ms": "1466126848000",
+  "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+  "expires_date": "2016-06-17 01:32:28 Etc/GMT",
+  "expires_date_ms": "1466127148000",
+  "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
+  "web_order_line_item_id": "1000000032727765",
+  "is_trial_period": "true"
+}
 
 ```
 
