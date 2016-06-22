@@ -1,6 +1,6 @@
-# Monza
-
-Monza is a ruby gem that makes iTunes App Store in app purchase receipt validation and auto-renewable subscription validation easy.
+# ![Monza](https://dl.dropboxusercontent.com/u/12314784/monza_asset.png)
+##### Super Easy In-App Purchase Receipt Validation
+Monza is a ruby gem that makes In-App Purchase receipt and Auto-Renewable subscription validation easy.
 
 You should always validate receipts on the server, in [Apple's words] (https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html#//apple_ref/doc/uid/TP40010573-CH104-SW1):
 > Use a trusted server to communicate with the App Store. Using your own server lets you design your app to recognize and trust only your server, and lets you ensure that your server connects with the App Store server. It is not possible to build a trusted connection between a user’s device and the App Store directly because you don’t control either end of that connection.
@@ -47,11 +47,11 @@ response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 +0000
 ##### Response Objects
 ```ruby
 # Receipt object
-# See Receipt class
+# See Receipt class or sample JSON below for full attributes
 response.receipt
 
 # Receipt In App Transactions
-# Returns array of TransactionReceipt objects, see TransactionReceipt class
+# Returns array of TransactionReceipt objects, see TransactionReceipt class or sample JSON below for full attributes
 response.receipt.in_app
 
 # Receipt Latest Transactions List, use these instead if in_app to ensure you always have the latest
