@@ -38,14 +38,14 @@ module Monza
       @application_version = attributes['application_version']
       @download_id = attributes['download_id']
       @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date'])
-      @receipt_creation_date_ms = Time.at(attributes['receipt_creation_date_ms'].to_i / 1000).to_datetime
-      @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'])
+      @receipt_creation_date_ms = Time.zone.at(attributes['receipt_creation_date_ms'].to_i / 1000)
+      @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST"))
       @request_date = DateTime.parse(attributes['request_date'])
-      @request_date_ms = Time.at(attributes['request_date_ms'].to_i / 1000).to_datetime
-      @request_date_pst = DateTime.parse(attributes['request_date_pst'])
+      @request_date_ms = Time.zone.at(attributes['request_date_ms'].to_i / 1000)
+      @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST"))
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
-      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).to_datetime
-      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'])
+      @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
+      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST"))
       @original_application_version = attributes['original_application_version']
 
       if attributes['version_external_identifier']
@@ -55,7 +55,7 @@ module Monza
         @app_item_id = attributes['app_item_id']
       end
       if attributes['expiration_date']
-        @expires_at = Time.at(attributes['expiration_date'].to_i / 1000).to_datetime
+        @expires_at = Time.zone.at(attributes['expiration_date'].to_i / 1000)
       end
 
       @in_app = []

@@ -28,34 +28,39 @@ module Monza
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
       @purchase_date = DateTime.parse(attributes['purchase_date']) if attributes['purchase_date']
-      @purchase_date_ms = Time.at(attributes['purchase_date_ms'].to_i / 1000).to_datetime
-      @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst']) if attributes['purchase_date_pst']
+      @purchase_date_ms = Time.zone.at(attributes['purchase_date_ms'].to_i / 1000)
+      @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['purchase_date_pst']
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date']) if attributes['original_purchase_date']
-      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).to_datetime
-      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst']) if attributes['original_purchase_date_pst']
+      @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
+      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
       if attributes['expires_date']
         @expires_date = DateTime.parse(attributes['expires_date'])
       end
       if attributes['expires_date_ms']
-        @expires_date_ms = Time.at(attributes['expires_date_ms'].to_i / 1000).to_datetime
+        @expires_date_ms = Time.zone.at(attributes['expires_date_ms'].to_i / 1000)
       end
       if attributes['expires_date_pst']
-        @expires_date_pst = DateTime.parse(attributes['expires_date_pst'])
+        @expires_date_pst = DateTime.parse(attributes['expires_date_pst'].gsub("America/Los_Angeles","PST"))
       end
       if attributes['is_trial_period']
         @is_trial_period = attributes['is_trial_period'].to_bool
       end
     end # end initialize
 
-    def is_renewal?
-      !is_first_transaction?
-    end
-
-    def is_first_transaction?
-      @original_transaction_id == @transaction_id
-    end
+    #
+    # Depcrecating - don't use these 
+    # These will only work if the user never cancels and then resubscribes
+    # The original_transaction_id does not reset after the user resubscribes
+    #
+    # def is_renewal?
+    #   !is_first_transaction?
+    # end
+    #
+    # def is_first_transaction?
+    #   @original_transaction_id == @transaction_id
+    # end
 
 
   end # end class
