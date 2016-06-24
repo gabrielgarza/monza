@@ -26,14 +26,14 @@ module Monza
 
     def is_subscription_active?
       if @latest_receipt_info.last
-        @latest_receipt_info.last.expires_date >= Time.current
+        @latest_receipt_info.last.expires_date_ms >= Time.zone.now
       else
         false
       end
     end
 
     def latest_expiry_date
-        @latest_receipt_info.last.expires_date if @latest_receipt_info.last
+        @latest_receipt_info.last.expires_date_ms if @latest_receipt_info.last
     end
 
     class VerificationError < StandardError
