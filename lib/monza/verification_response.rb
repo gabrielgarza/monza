@@ -26,7 +26,7 @@ module Monza
 
     def is_subscription_active?
       if @latest_receipt_info.last
-        @latest_receipt_info.last.expires_date >= Date.today
+        @latest_receipt_info.last.expires_date >= Time.current
       else
         false
       end
