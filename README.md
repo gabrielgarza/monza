@@ -39,8 +39,8 @@ response = Monza::Receipt.verify(data, options)
 response.is_subscription_active? # => true or false
 
 # Check most recent expiry date
-# DateTime
-response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 +0000
+# ActiveSupport::TimeWithZone
+response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 UTC +00:00
 
 ```
 
