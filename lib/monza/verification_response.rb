@@ -33,7 +33,7 @@ module Monza
     end
 
     def latest_expiry_date
-        @latest_receipt_info.last.expires_date_ms if @latest_receipt_info.last
+      @latest_receipt_info.last.expires_date_ms if @latest_receipt_info.last
     end
 
     class VerificationError < StandardError
@@ -66,10 +66,8 @@ module Monza
         end
       end
     end # end VerificationError
-
   end # class
 end # module
-
 
 # Sample JSON Response
 #

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Monza::Client do
-  describe "verification_url" do
+  describe 'verification_url' do
     context 'development' do
       it 'should have correct url' do
         expect(Monza::Client.development.verification_url).to eq 'https://sandbox.itunes.apple.com/verifyReceipt'
