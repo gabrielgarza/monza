@@ -1,4 +1,5 @@
 require 'time'
+require 'active_support/core_ext/time'
 
 module Monza
   class Receipt
@@ -38,13 +39,13 @@ module Monza
       @application_version = attributes['application_version']
       @download_id = attributes['download_id']
       @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date'])
-      @receipt_creation_date_ms = Time.at(attributes['receipt_creation_date_ms'].to_i / 1000).zone
+      @receipt_creation_date_ms = Time.at(attributes['receipt_creation_date_ms'].to_i / 1000).in_time_zone
       @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST"))
       @request_date = DateTime.parse(attributes['request_date'])
-      @request_date_ms = Time.at(attributes['request_date_ms'].to_i / 1000).zone
+      @request_date_ms = Time.at(attributes['request_date_ms'].to_i / 1000).in_time_zone
       @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST"))
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
-      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).zone
+      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).in_time_zone
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST"))
       @original_application_version = attributes['original_application_version']
 
@@ -55,7 +56,7 @@ module Monza
         @app_item_id = attributes['app_item_id']
       end
       if attributes['expiration_date']
-        @expires_at = Time.at(attributes['expiration_date'].to_i / 1000).zone
+        @expires_at = Time.at(attributes['expiration_date'].to_i / 1000).in_time_zone
       end
 
       @in_app = []

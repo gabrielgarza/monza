@@ -1,4 +1,5 @@
 require 'time'
+require 'active_support/core_ext/time'
 
 module Monza
   class TransactionReceipt
@@ -28,10 +29,10 @@ module Monza
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
       @purchase_date = DateTime.parse(attributes['purchase_date']) if attributes['purchase_date']
-      @purchase_date_ms = Time.at(attributes['purchase_date_ms'].to_i / 1000).zone
+      @purchase_date_ms = Time.at(attributes['purchase_date_ms'].to_i / 1000).in_time_zone
       @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['purchase_date_pst']
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date']) if attributes['original_purchase_date']
-      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).zone
+      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).in_time_zone
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
@@ -39,7 +40,7 @@ module Monza
         @expires_date = DateTime.parse(attributes['expires_date'])
       end
       if attributes['expires_date_ms']
-        @expires_date_ms = Time.at(attributes['expires_date_ms'].to_i / 1000).zone
+        @expires_date_ms = Time.at(attributes['expires_date_ms'].to_i / 1000).in_time_zone
       end
       if attributes['expires_date_pst']
         @expires_date_pst = DateTime.parse(attributes['expires_date_pst'].gsub("America/Los_Angeles","PST"))
