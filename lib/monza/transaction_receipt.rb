@@ -1,4 +1,5 @@
 require 'time'
+require 'active_support/core_ext/time'
 
 module Monza
   class TransactionReceipt
@@ -23,15 +24,15 @@ module Monza
     attr_reader :is_trial_period
 
     def initialize(attributes)
-      @quantity = attributes['quantity']
+      @quantity = attributes['quantity'].to_i
       @product_id = attributes['product_id']
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
       @purchase_date = DateTime.parse(attributes['purchase_date']) if attributes['purchase_date']
-      @purchase_date_ms = Time.zone.at(attributes['purchase_date_ms'].to_i / 1000)
+      @purchase_date_ms = Time.at(attributes['purchase_date_ms'].to_i / 1000).in_time_zone
       @purchase_date_pst = DateTime.parse(attributes['purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['purchase_date_pst']
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date']) if attributes['original_purchase_date']
-      @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
+      @original_purchase_date_ms = Time.at(attributes['original_purchase_date_ms'].to_i / 1000).in_time_zone
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
@@ -39,7 +40,7 @@ module Monza
         @expires_date = DateTime.parse(attributes['expires_date'])
       end
       if attributes['expires_date_ms']
-        @expires_date_ms = Time.zone.at(attributes['expires_date_ms'].to_i / 1000)
+        @expires_date_ms = Time.at(attributes['expires_date_ms'].to_i / 1000).in_time_zone
       end
       if attributes['expires_date_pst']
         @expires_date_pst = DateTime.parse(attributes['expires_date_pst'].gsub("America/Los_Angeles","PST"))
@@ -50,7 +51,7 @@ module Monza
     end # end initialize
 
     #
-    # Depcrecating - don't use these 
+    # Depcrecating - don't use these
     # These will only work if the user never cancels and then resubscribes
     # The original_transaction_id does not reset after the user resubscribes
     #
@@ -61,8 +62,6 @@ module Monza
     # def is_first_transaction?
     #   @original_transaction_id == @transaction_id
     # end
-
-
   end # end class
 end # end module
 
