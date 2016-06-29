@@ -1,4 +1,5 @@
 require 'time'
+require 'active_support/core_ext/time'
 
 module Monza
   class Receipt

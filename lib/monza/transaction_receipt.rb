@@ -1,4 +1,5 @@
 require 'time'
+require 'active_support/core_ext/time'
 
 module Monza
   class TransactionReceipt
@@ -23,7 +24,7 @@ module Monza
     attr_reader :is_trial_period
 
     def initialize(attributes)
-      @quantity = attributes['quantity']
+      @quantity = attributes['quantity'].to_i
       @product_id = attributes['product_id']
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
@@ -50,7 +51,7 @@ module Monza
     end # end initialize
 
     #
-    # Depcrecating - don't use these 
+    # Depcrecating - don't use these
     # These will only work if the user never cancels and then resubscribes
     # The original_transaction_id does not reset after the user resubscribes
     #
@@ -61,8 +62,6 @@ module Monza
     # def is_first_transaction?
     #   @original_transaction_id == @transaction_id
     # end
-
-
   end # end class
 end # end module
 
