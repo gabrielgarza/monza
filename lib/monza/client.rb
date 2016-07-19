@@ -39,7 +39,6 @@ module Monza
           nil
         end
       else
-        puts status
         raise VerificationResponse::VerificationError.new(status)
       end
 
