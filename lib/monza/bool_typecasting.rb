@@ -7,7 +7,12 @@ class String
   #  if using Rails empty? can be changed for blank?
 end
 
-class Fixnum
+if RUBY_VERSION >= "2.4"
+  integer_class = Object.const_get("Integer")
+else
+  integer_class = Object.const_get("Fixnum")
+end
+integer_class::class_eval do
   def to_bool
     return true if self == 1
     return false if self == 0
