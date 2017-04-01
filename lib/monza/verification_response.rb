@@ -9,9 +9,11 @@ module Monza
     attr_reader :receipt
     attr_reader :latest_receipt_info
     attr_reader :latest_receipt
+    attr_reader :original_json_response
 
 
     def initialize(attributes)
+      @original_json_response = attributes
       @status = attributes['status']
       @environment = attributes['environment']
       @receipt = Receipt.new(attributes['receipt'])
