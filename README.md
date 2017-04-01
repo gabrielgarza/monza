@@ -68,6 +68,8 @@ response.latest_receipt_info.last.is_trial_period # => true or false
 # Latest receipt base64 string
 response.latest_receipt
 
+# original JSON response
+response.original_json_response
 ```
 
 ##### Sample JSON Response Schema
