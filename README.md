@@ -1,4 +1,7 @@
-#![monza_asset](https://cloud.githubusercontent.com/assets/1076706/16257552/1baa36f8-380e-11e6-8730-cbbd1fe73c6c.png)
+
+![travis_status](https://travis-ci.org/gabrielgarza/monza.svg?branch=master)
+
+![monza_asset](https://cloud.githubusercontent.com/assets/1076706/16257552/1baa36f8-380e-11e6-8730-cbbd1fe73c6c.png)
 
 #### Monza is a ruby gem that makes In-App Purchase receipt and Auto-Renewable subscription validation easy.
 
