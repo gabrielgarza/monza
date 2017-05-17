@@ -1,5 +1,4 @@
-
-![travis_status](https://travis-ci.org/gabrielgarza/monza.svg?branch=master)
+[![Build Status](https://travis-ci.org/gabrielgarza/monza.svg?branch=master)](https://travis-ci.org/gabrielgarza/monza)
 
 ![monza_asset](https://cloud.githubusercontent.com/assets/1076706/16257552/1baa36f8-380e-11e6-8730-cbbd1fe73c6c.png)
 
