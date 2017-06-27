@@ -22,6 +22,7 @@ module Monza
     attr_reader :expires_date_ms
     attr_reader :expires_date_pst
     attr_reader :is_trial_period
+    attr_reader :cancellation_date
 
     def initialize(attributes)
       @quantity = attributes['quantity'].to_i
@@ -47,6 +48,9 @@ module Monza
       end
       if attributes['is_trial_period']
         @is_trial_period = attributes['is_trial_period'].to_bool
+      end
+      if attributes['cancellation_date']
+        @cancellation_date = DateTime.parse(attributes['cancellation_date'])
       end
     end # end initialize
 
