@@ -7,5 +7,6 @@
 /pkg/
 /spec/reports/
 /tmp/
-
+*.iml
 .DS_Store
+.idea
