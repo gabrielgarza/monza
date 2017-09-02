@@ -52,6 +52,7 @@ module Monza
       }
 
       parameters['password'] = options[:shared_secret] if options[:shared_secret]
+      parameters['exclude-old-transactions'] = options[:exclude_old_transactions] if options[:exclude_old_transactions]
 
       uri = URI(@verification_url)
       http = Net::HTTP.new(uri.host, uri.port)
