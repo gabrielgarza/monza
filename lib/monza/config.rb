@@ -5,7 +5,6 @@ module Monza
 
   # Set default for Time zone if none has been set
   # Default is UTC
-  Time.zone = Time.zone ? Time.zone : "UTC"
-
+  Time.zone_default ||= Time.find_zone!("UTC")
 
 end
