@@ -33,6 +33,7 @@ options = { shared_secret: "your shared secret" }
 response = Monza::Receipt.verify(data, options)
 
 ```
+You can also pass in `exclude-old-transactions` as an option in the options hash for [iOS7 style app receipts](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html#//apple_ref/doc/uid/TP40010573-CH104-SW3).
 
 ##### Useful Methods
 ```ruby
