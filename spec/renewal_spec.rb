@@ -7,7 +7,7 @@ describe Monza::RenewalInfo do
 
     it { expect(renewal_info.product_id).to eq "product_id" }
     it { expect(renewal_info.original_transaction_id).to eq "1000000218147500" }
-    it { expect(renewal_info.expiration_intent).to eq :customer_cancelled }
+    it { expect(renewal_info.expiration_intent).to eq "1" }
     it { expect(renewal_info.will_renew).to eq false }
     it { expect(renewal_info.is_in_billing_retry_period).to eq false }
     it { expect(renewal_info.auto_renew_product_id).to eq "renew_product_id" }
