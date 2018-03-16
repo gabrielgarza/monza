@@ -58,5 +58,15 @@
       "is_trial_period": "true"
     }
   ],
-  "latest_receipt": "base 64 string"
+  "latest_receipt": "base 64 string",
+  "pending_renewal_info": [
+    {
+      "expiration_intent": "1",
+      "auto_renew_product_id": "renew_product_id",
+      "original_transaction_id": "1000000218147500",
+      "is_in_billing_retry_period": "0",
+      "product_id": "product_id",
+      "auto_renew_status": "0"
+    }
+  ]
 }
