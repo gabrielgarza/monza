@@ -39,10 +39,11 @@ module Monza
     end
 
     class VerificationError < StandardError
-      attr_accessor :code
+      attr_accessor :code, :original_json_response
 
-      def initialize(code)
+      def initialize(code, original_json_response = nil)
         @code = Integer(code)
+        @original_json_response = original_json_response
       end
 
       def message

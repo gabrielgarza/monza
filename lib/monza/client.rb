@@ -39,7 +39,7 @@ module Monza
           nil
         end
       else
-        raise VerificationResponse::VerificationError.new(status)
+        raise VerificationResponse::VerificationError.new(status, json_response)
       end
 
     end
