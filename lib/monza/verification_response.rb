@@ -28,14 +28,14 @@ module Monza
 
     def is_subscription_active?
       if @latest_receipt_info.last
-        @latest_receipt_info.last.expires_date_ms >= Time.zone.now
+        @latest_receipt_info.last.expires_date >= Time.zone.now
       else
         false
       end
     end
 
     def latest_expiry_date
-      @latest_receipt_info.last.expires_date_ms if @latest_receipt_info.last
+      @latest_receipt_info.last.expires_date if @latest_receipt_info.last
     end
 
     class VerificationError < StandardError
@@ -107,8 +107,8 @@ end # module
 #         "original_purchase_date": "2016-06-17 01:30:33 Etc/GMT",
 #         "original_purchase_date_ms": "1466127033000",
 #         "original_purchase_date_pst": "2016-06-16 18:30:33 America/Los_Angeles",
-#         "expires_date": "2016-06-17 01:37:28 Etc/GMT",
-#         "expires_date_ms": "1466127448000",
+#         "expires_date_formatted": "2016-06-17 01:37:28 Etc/GMT",
+#         "expires_date": "1466127448000",
 #         "expires_date_pst": "2016-06-16 18:37:28 America/Los_Angeles",
 #         "web_order_line_item_id": "1000000032727764",
 #         "is_trial_period": "false"
@@ -127,8 +127,8 @@ end # module
 #       "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
 #       "original_purchase_date_ms": "1466126848000",
 #       "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
-#       "expires_date": "2016-06-17 01:32:28 Etc/GMT",
-#       "expires_date_ms": "1466127148000",
+#       "expires_date_formatted": "2016-06-17 01:32:28 Etc/GMT",
+#       "expires_date": "1466127148000",
 #       "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
 #       "web_order_line_item_id": "1000000032727765",
 #       "is_trial_period": "true"
