@@ -18,14 +18,14 @@ module Monza
     attr_reader :original_purchase_date_pst
     attr_reader :web_order_line_item_id
 
+    attr_reader :expires_date_formatted
     attr_reader :expires_date
-    attr_reader :expires_date_ms
     attr_reader :expires_date_pst
     attr_reader :is_trial_period
     attr_reader :cancellation_date
 
     def initialize(attributes)
-      @quantity = attributes['quantity'].to_i
+      @quantity = attributes['quantity'].to_i if attributes['quantity']
       @product_id = attributes['product_id']
       @transaction_id = attributes['transaction_id']
       @original_transaction_id = attributes['original_transaction_id']
@@ -37,11 +37,11 @@ module Monza
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
-      if attributes['expires_date']
-        @expires_date = DateTime.parse(attributes['expires_date'])
+      if attributes['expires_date_formatted']
+        @expires_date_formatted = DateTime.parse(attributes['expires_date_formatted'])
       end
-      if attributes['expires_date_ms']
-        @expires_date_ms = Time.zone.at(attributes['expires_date_ms'].to_i / 1000)
+      if attributes['expires_date']
+        @expires_date = Time.zone.at(attributes['expires_date'].to_i / 1000)
       end
       if attributes['expires_date_pst']
         @expires_date_pst = DateTime.parse(attributes['expires_date_pst'].gsub("America/Los_Angeles","PST"))

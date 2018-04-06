@@ -51,8 +51,8 @@ describe Monza::Receipt do
       expect(in_app.original_purchase_date).to eq DateTime.parse('2016-06-17 01:30:33 Etc/GMT')
       expect(in_app.original_purchase_date_ms).to eq Time.zone.at("1466127033000".to_i / 1000)
 
-      expect(in_app.expires_date).to eq DateTime.parse('2016-06-17 01:37:28 Etc/GMT')
-      expect(in_app.expires_date_ms).to eq Time.zone.at("1466127448000".to_i / 1000)
+      expect(in_app.expires_date_formatted).to eq DateTime.parse('2016-06-17 01:37:28 Etc/GMT')
+      expect(in_app.expires_date).to eq Time.zone.at("1466127448000".to_i / 1000)
 
       expect(in_app.is_trial_period).to eq false
       expect(in_app.cancellation_date).to be_nil
