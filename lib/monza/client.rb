@@ -33,11 +33,7 @@ module Monza
 
       case status
       when 0
-        begin
-          return VerificationResponse.new(json_response)
-        rescue
-          nil
-        end
+        return VerificationResponse.new(json_response)
       else
         raise VerificationResponse::VerificationError.new(status, json_response)
       end
