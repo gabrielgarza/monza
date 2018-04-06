@@ -5,6 +5,8 @@ module Monza
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
     attr_reader :status
+    attr_reader :auto_renew_status
+    attr_reader :auto_renew_product_id
     attr_reader :environment
     attr_reader :receipt
     attr_reader :latest_receipt_info
@@ -15,6 +17,8 @@ module Monza
     def initialize(attributes)
       @original_json_response = attributes
       @status = attributes['status']
+      @auto_renew_status = attributes['auto_renew_status']
+      @auto_renew_product_id = attributes['auto_renew_product_id']
       @environment = attributes['environment']
       @receipt = Receipt.new(attributes['receipt'])
       @latest_receipt_info = []
