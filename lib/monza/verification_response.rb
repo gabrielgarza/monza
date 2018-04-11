@@ -23,7 +23,7 @@ module Monza
       @receipt = Receipt.new(attributes['receipt'])
       @latest_receipt_info = []
       if attributes['latest_receipt_info']
-        [attributes['latest_receipt_info']].flatten.each do |transaction_receipt_attributes|
+        attributes['latest_receipt_info'].each do |transaction_receipt_attributes|
           @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
         end
       end

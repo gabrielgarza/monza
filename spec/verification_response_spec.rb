@@ -45,8 +45,8 @@ describe Monza::VerificationResponse do
       expect(latest_transaction.original_purchase_date).to eq DateTime.parse('2016-06-17 01:27:28 Etc/GMT')
       expect(latest_transaction.original_purchase_date_ms).to eq Time.zone.at("1466126848000".to_i / 1000)
 
-      expect(latest_transaction.expires_date_formatted).to eq DateTime.parse('2016-06-17 01:32:28 Etc/GMT')
-      expect(latest_transaction.expires_date).to eq Time.zone.at("1466127148000".to_i / 1000)
+      expect(latest_transaction.expires_date).to eq DateTime.parse('2016-06-17 01:32:28 Etc/GMT')
+      expect(latest_transaction.expires_date_ms).to eq Time.zone.at("1466127148000".to_i / 1000)
 
       expect(latest_transaction.is_trial_period).to eq true
       expect(latest_transaction.cancellation_date).to be_nil
@@ -72,8 +72,8 @@ describe Monza::VerificationResponse do
       expect(latest_transaction.original_purchase_date).to eq DateTime.parse('2016-06-17 01:27:28 Etc/GMT')
       expect(latest_transaction.original_purchase_date_ms).to eq Time.zone.at("1466126848000".to_i / 1000)
 
-      expect(latest_transaction.expires_date_formatted).to eq DateTime.parse('2016-06-17 01:32:28 Etc/GMT')
-      expect(latest_transaction.expires_date).to eq Time.zone.at("1466127148000".to_i / 1000)
+      expect(latest_transaction.expires_date).to eq DateTime.parse('2016-06-17 01:32:28 Etc/GMT')
+      expect(latest_transaction.expires_date_ms).to eq Time.zone.at("1466127148000".to_i / 1000)
 
       expect(latest_transaction.is_trial_period).to eq true
       expect(latest_transaction.cancellation_date).to eq DateTime.parse('2016-06-17 01:37:28 Etc/GMT')
