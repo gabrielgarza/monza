@@ -38,12 +38,14 @@ module Monza
       @bundle_id = attributes['bundle_id']
       @application_version = attributes['application_version']
       @download_id = attributes['download_id']
-      @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date'])
-      @receipt_creation_date_ms = Time.zone.at(attributes['receipt_creation_date_ms'].to_i / 1000)
-      @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST"))
-      @request_date = DateTime.parse(attributes['request_date'])
-      @request_date_ms = Time.zone.at(attributes['request_date_ms'].to_i / 1000)
-      @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST"))
+
+      @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date']) rescue nil
+      @receipt_creation_date_ms = Time.zone.at(attributes['receipt_creation_date_ms'].to_i / 1000) rescue nil
+      @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST")) rescue nil
+      @request_date = DateTime.parse(attributes['request_date']) rescue nil
+      @request_date_ms = Time.zone.at(attributes['request_date_ms'].to_i / 1000) rescue nil
+      @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST")) rescue nil
+
       @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
       @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST"))

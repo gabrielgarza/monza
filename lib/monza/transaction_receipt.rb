@@ -38,10 +38,18 @@ module Monza
       @web_order_line_item_id = attributes['web_order_line_item_id']
 
       if attributes['expires_date']
-        @expires_date = DateTime.parse(attributes['expires_date'])
+        begin
+          # Attempt to parse as RFC 3339 timestamp (new-style receipt)
+          @expires_date = DateTime.parse(attributes['expires_date'])
+        rescue
+          # Attempt to parse as integer ms epoch (old-style receipt)
+          @expires_date = Time.at(attributes['expires_date'].to_i / 1000).to_datetime
+        end
       end
       if attributes['expires_date_ms']
         @expires_date_ms = Time.zone.at(attributes['expires_date_ms'].to_i / 1000)
+      elsif attributes['expires_date']
+        @expires_date_ms = Time.zone.at(attributes['expires_date'].to_i / 1000)
       end
       if attributes['expires_date_pst']
         @expires_date_pst = DateTime.parse(attributes['expires_date_pst'].gsub("America/Los_Angeles","PST"))
