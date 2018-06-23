@@ -5,6 +5,8 @@ module Monza
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
     attr_reader :status
+    attr_reader :auto_renew_status
+    attr_reader :auto_renew_product_id
     attr_reader :environment
     attr_reader :receipt
     attr_reader :latest_receipt_info
@@ -16,6 +18,8 @@ module Monza
     def initialize(attributes)
       @original_json_response = attributes
       @status = attributes['status']
+      @auto_renew_status = attributes['auto_renew_status']
+      @auto_renew_product_id = attributes['auto_renew_product_id']
       @environment = attributes['environment']
       @receipt = Receipt.new(attributes['receipt'])
       @latest_receipt_info = []
@@ -35,21 +39,22 @@ module Monza
 
     def is_subscription_active?
       if @latest_receipt_info.last
-        @latest_receipt_info.last.expires_date_ms >= Time.zone.now
+        @latest_receipt_info.last.expires_date >= Time.zone.now
       else
         false
       end
     end
 
     def latest_expiry_date
-      @latest_receipt_info.last.expires_date_ms if @latest_receipt_info.last
+      @latest_receipt_info.last.expires_date if @latest_receipt_info.last
     end
 
     class VerificationError < StandardError
-      attr_accessor :code
+      attr_accessor :code, :original_json_response
 
-      def initialize(code)
+      def initialize(code, original_json_response = nil)
         @code = Integer(code)
+        @original_json_response = original_json_response
       end
 
       def message
@@ -113,8 +118,8 @@ end # module
 #         "original_purchase_date": "2016-06-17 01:30:33 Etc/GMT",
 #         "original_purchase_date_ms": "1466127033000",
 #         "original_purchase_date_pst": "2016-06-16 18:30:33 America/Los_Angeles",
-#         "expires_date": "2016-06-17 01:37:28 Etc/GMT",
-#         "expires_date_ms": "1466127448000",
+#         "expires_date_formatted": "2016-06-17 01:37:28 Etc/GMT",
+#         "expires_date": "1466127448000",
 #         "expires_date_pst": "2016-06-16 18:37:28 America/Los_Angeles",
 #         "web_order_line_item_id": "1000000032727764",
 #         "is_trial_period": "false"
@@ -133,8 +138,8 @@ end # module
 #       "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
 #       "original_purchase_date_ms": "1466126848000",
 #       "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
-#       "expires_date": "2016-06-17 01:32:28 Etc/GMT",
-#       "expires_date_ms": "1466127148000",
+#       "expires_date_formatted": "2016-06-17 01:32:28 Etc/GMT",
+#       "expires_date": "1466127148000",
 #       "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
 #       "web_order_line_item_id": "1000000032727765",
 #       "is_trial_period": "true"

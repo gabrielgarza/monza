@@ -38,15 +38,21 @@ module Monza
       @bundle_id = attributes['bundle_id']
       @application_version = attributes['application_version']
       @download_id = attributes['download_id']
-      @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date'])
-      @receipt_creation_date_ms = Time.zone.at(attributes['receipt_creation_date_ms'].to_i / 1000)
-      @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST"))
-      @request_date = DateTime.parse(attributes['request_date'])
-      @request_date_ms = Time.zone.at(attributes['request_date_ms'].to_i / 1000)
-      @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST"))
-      @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
-      @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
-      @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST"))
+      if attributes['receipt_creation_date']
+        @receipt_creation_date = DateTime.parse(attributes['receipt_creation_date'])
+        @receipt_creation_date_ms = Time.zone.at(attributes['receipt_creation_date_ms'].to_i / 1000)
+        @receipt_creation_date_pst = DateTime.parse(attributes['receipt_creation_date_pst'].gsub("America/Los_Angeles","PST"))
+      end
+      if attributes['request_date']
+        @request_date = DateTime.parse(attributes['request_date'])
+        @request_date_ms = Time.zone.at(attributes['request_date_ms'].to_i / 1000)
+        @request_date_pst = DateTime.parse(attributes['request_date_pst'].gsub("America/Los_Angeles","PST"))
+      end
+      if attributes['original_purchase_date']
+        @original_purchase_date = DateTime.parse(attributes['original_purchase_date'])
+        @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
+        @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST"))
+      end
       @original_application_version = attributes['original_application_version']
 
       if attributes['version_external_identifier']
@@ -122,8 +128,8 @@ end # end module
 #         "original_purchase_date": "2016-06-17 01:30:33 Etc/GMT",
 #         "original_purchase_date_ms": "1466127033000",
 #         "original_purchase_date_pst": "2016-06-16 18:30:33 America/Los_Angeles",
-#         "expires_date": "2016-06-17 01:37:28 Etc/GMT",
-#         "expires_date_ms": "1466127448000",
+#         "expires_date_formatted": "2016-06-17 01:37:28 Etc/GMT",
+#         "expires_date": "1466127448000",
 #         "expires_date_pst": "2016-06-16 18:37:28 America/Los_Angeles",
 #         "web_order_line_item_id": "1000000032727764",
 #         "is_trial_period": "false"
