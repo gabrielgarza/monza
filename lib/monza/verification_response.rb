@@ -8,6 +8,7 @@ module Monza
     attr_reader :environment
     attr_reader :receipt
     attr_reader :latest_receipt_info
+    attr_reader :renewal_info
     attr_reader :latest_receipt
     attr_reader :original_json_response
 
@@ -21,6 +22,12 @@ module Monza
       if attributes['latest_receipt_info']
         attributes['latest_receipt_info'].each do |transaction_receipt_attributes|
           @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
+        end
+      end
+      @renewal_info = []
+      if attributes['pending_renewal_info']
+        attributes['pending_renewal_info'].each do |renewal_info_attributes|
+          @renewal_info << RenewalInfo.new(renewal_info_attributes)
         end
       end
       @latest_receipt = attributes['latest_receipt']
@@ -133,5 +140,15 @@ end # module
 #       "is_trial_period": "true"
 #     }
 #   ],
-#   "latest_receipt": "base 64"
+#   "latest_receipt": "base 64",
+#   "pending_renewal_info": [
+#     {
+#       "expiration_intent": "1",
+#       "auto_renew_product_id": "renew_product_id",
+#       "original_transaction_id": "1000000218147500",
+#       "is_in_billing_retry_period": "0",
+#       "product_id": "product_id",
+#       "auto_renew_status": "0"
+#     }
+#   ]
 # }

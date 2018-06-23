@@ -1,6 +1,8 @@
 require "monza/version"
 require "monza/client"
+require "monza/renewal_info"
 require "monza/verification_response"
+require "monza/status_response"
 require "monza/receipt"
 require "monza/transaction_receipt"
 require "monza/bool_typecasting"

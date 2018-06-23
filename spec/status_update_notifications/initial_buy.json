@@ -1,0 +1,31 @@
+{
+    "auto_renew_product_id": "product_id.quarterly",
+    "auto_renew_status": "true",
+    "environment": "Sandbox",
+    "latest_receipt": "base 64 string",
+    "latest_receipt_info": {
+        "bid": "co.bundle.id",
+        "bvrs": "1004",
+        "expires_date": "1521159784000",
+        "expires_date_formatted": "2018-03-16 00:23:04 Etc/GMT",
+        "expires_date_formatted_pst": "2018-03-15 17:23:04 America/Los_Angeles",
+        "is_in_intro_offer_period": "false",
+        "is_trial_period": "false",
+        "item_id": "1359898757",
+        "original_purchase_date": "2018-03-15 23:23:05 Etc/GMT",
+        "original_purchase_date_ms": "1521156185000",
+        "original_purchase_date_pst": "2018-03-15 16:23:05 America/Los_Angeles",
+        "original_transaction_id": "1000000383185294",
+        "product_id": "product_id.annual",
+        "purchase_date": "2018-03-15 23:23:04 Etc/GMT",
+        "purchase_date_ms": "1521156184000",
+        "purchase_date_pst": "2018-03-15 16:23:04 America/Los_Angeles",
+        "quantity": "1",
+        "transaction_id": "1000000383185294",
+        "unique_identifier": "3a142176fee52ba64ddc3ba3b685786bd58cb4fe",
+        "unique_vendor_identifier": "D8E8B1EB-7A35-4E88-A21C-584E4FEB6543",
+        "web_order_line_item_id": "1000000038128113"
+    },
+    "notification_type": "INITIAL_BUY",
+    "password": "password"
+}
