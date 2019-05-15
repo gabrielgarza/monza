@@ -43,7 +43,7 @@ module Monza
         false
       end
     end
-    
+
     def is_any_subscription_active?
       expires_dates_ms = @latest_receipt_info.map(&:expires_date_ms)
       latest_expires_date_ms = expires_dates_ms.max
@@ -52,6 +52,16 @@ module Monza
         latest_expires_date_ms >= Time.zone.now
       else
         false
+      end
+    end
+
+    def latest_active_transaction_receipt
+      latest_active_sub = @latest_receipt_info.sort_by(&:expires_date_ms).last
+
+      if latest_active_sub && latest_active_sub.expires_date_ms >= Time.zone.now
+        return latest_active_sub
+      else
+        return nil
       end
     end
 

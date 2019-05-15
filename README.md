@@ -46,6 +46,9 @@ response.is_subscription_active? # => true or false
 # this is helpful in case the most recent transaction was cancelled but the user still has a previous transaction or subscription that is active
 response.is_any_subscription_active? # => true or false
 
+# Returns the active subscription TransactionReceipt or nil
+response.latest_active_transaction_receipt # => TransactionReceipt instance
+
 # Check most recent expiry date
 # ActiveSupport::TimeWithZone
 response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 UTC +00:00
