@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'active_support/time_with_zone.rb'
+require 'active_support/core_ext/numeric/time.rb'
 
 describe Monza::VerificationResponse do
   context 'verification example' do
@@ -77,6 +79,47 @@ describe Monza::VerificationResponse do
 
       expect(latest_transaction.is_trial_period).to eq true
       expect(latest_transaction.cancellation_date).to eq DateTime.parse('2016-06-17 01:37:28 Etc/GMT')
+    end
+  end
+
+  describe 'is_subscription_active?' do
+    def replace_expires_date(hash, time)
+      hash.merge!(
+        "expires_date" => time.to_s,
+        "expires_date_ms" => (time.to_i * 1000).to_s,
+        "expires_date_pst" => time.in_time_zone('America/Los_Angeles').to_s
+      )
+    end
+
+    let(:response) { JSON.parse File.open("#{Dir.pwd}/spec/response.json", 'rb').read }
+    let(:verify) { described_class.new(response) }
+    subject { verify.is_subscription_active? }
+
+    context 'for a receipt with expiration date in the past' do
+      it { is_expected.to be false }
+    end
+
+    context 'for a receipt with expiration date in the future' do
+      let(:verify) do
+        response["receipt"]["in_app"].each do |in_app|
+          replace_expires_date(in_app, 4.days.from_now)
+        end
+        response["latest_receipt_info"].each do |lri|
+          replace_expires_date(lri, 4.days.from_now)
+        end
+
+        described_class.new(response)
+      end
+
+      context 'without cancellation date' do
+        it { is_expected.to be true }
+      end
+
+      context 'with cancellatioin date' do
+        let(:response) { JSON.parse File.open("#{Dir.pwd}/spec/cancellation_response.json", 'rb').read }
+
+        it { is_expected.to be false }
+      end
     end
   end
 end
