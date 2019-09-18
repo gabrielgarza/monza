@@ -38,14 +38,18 @@ module Monza
 
     def is_subscription_active?
       if @latest_receipt_info.last
-        @latest_receipt_info.last.expires_date_ms >= Time.zone.now
+        if @latest_receipt_info.last.cancellation_date
+          false
+        else
+          @latest_receipt_info.last.expires_date_ms >= Time.zone.now
+        end
       else
         false
       end
     end
 
     def is_any_subscription_active?
-      expires_dates_ms = @latest_receipt_info.map(&:expires_date_ms)
+      expires_dates_ms = @latest_receipt_info.reject(&:cancellation_date).map(&:expires_date_ms)
       latest_expires_date_ms = expires_dates_ms.max
 
       if latest_expires_date_ms
