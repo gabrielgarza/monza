@@ -11,7 +11,7 @@ describe Monza::RenewalInfo do
     it { expect(renewal_info.will_renew).to eq false }
     it { expect(renewal_info.is_in_billing_retry_period).to eq false }
     it { expect(renewal_info.auto_renew_product_id).to eq "renew_product_id" }
-    it { expect(renewal_info.grace_period_expires_date).to eq DateTime.parse('2013-08-01 07:00:00 Etc/GMT') }
-    it { expect(renewal_info.grace_period_expires_date_ms).to eq Time.zone.at("1375340400000".to_i / 1000) }
+    it { expect(renewal_info.grace_period_expires_date).to eq DateTime.parse('2016-06-17 01:27:28 Etc/GMT') }
+    it { expect(renewal_info.grace_period_expires_date_ms).to eq Time.zone.at("1466126848000".to_i / 1000) }
   end
 end
