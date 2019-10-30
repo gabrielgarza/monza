@@ -9,12 +9,19 @@ module Monza
     attr_reader :original_transaction_id
     attr_reader :is_in_billing_retry_period
     attr_reader :will_renew
+    attr_reader :grace_period_expires_date
+    attr_reader :grace_period_expires_date_ms
+    attr_reader :grace_period_expires_date_pst
 
     def initialize(attributes)
 
       @product_id = attributes['product_id']
       @auto_renew_product_id = attributes['auto_renew_product_id']
       @original_transaction_id = attributes['original_transaction_id']
+
+      @grace_period_expires_date = DateTime.parse(attributes['grace_period_expires_date'])
+      @grace_period_expires_date_ms = Time.zone.at(attributes['grace_period_expires_date_ms'].to_i / 1000)
+      @grace_period_expires_date_pst = DateTime.parse(attributes['grace_period_expires_date_pst'].gsub("America/Los_Angeles","PST"))
 
       if attributes['expiration_intent']
         @expiration_intent = attributes['expiration_intent']
@@ -25,7 +32,7 @@ module Monza
       end
 
       if attributes['auto_renew_status']
-        @will_renew = attributes['auto_renew_status'].to_bool 
+        @will_renew = attributes['auto_renew_status'].to_bool
       end
     end # end initialize
 
