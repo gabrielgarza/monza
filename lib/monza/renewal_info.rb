@@ -19,10 +19,15 @@ module Monza
       @auto_renew_product_id = attributes['auto_renew_product_id']
       @original_transaction_id = attributes['original_transaction_id']
 
-      @grace_period_expires_date = DateTime.parse(attributes['grace_period_expires_date'])
-      @grace_period_expires_date_ms = Time.zone.at(attributes['grace_period_expires_date_ms'].to_i / 1000)
-      @grace_period_expires_date_pst = DateTime.parse(attributes['grace_period_expires_date_pst'].gsub("America/Los_Angeles","PST"))
-
+      if attributes['grace_period_expires_date']
+        @grace_period_expires_date = DateTime.parse(attributes['grace_period_expires_date'])
+      end
+      if attributes['grace_period_expires_date_ms']
+        @grace_period_expires_date_ms = Time.zone.at(attributes['grace_period_expires_date_ms'].to_i / 1000)
+      end
+      if attributes['grace_period_expires_date_pst']
+        @grace_period_expires_date_pst = DateTime.parse(attributes['grace_period_expires_date_pst'].gsub("America/Los_Angeles","PST"))
+      end
       if attributes['expiration_intent']
         @expiration_intent = attributes['expiration_intent']
       end

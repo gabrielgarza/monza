@@ -66,10 +66,7 @@
       "original_transaction_id": "1000000218147500",
       "is_in_billing_retry_period": "0",
       "product_id": "product_id",
-      "auto_renew_status": "0",
-      "grace_period_expires_date": "2016-06-17 01:27:28 Etc/GMT",
-      "grace_period_expires_date_ms": "1466126848000",
-      "grace_period_expires_date_pst": "2016-06-16 18:27:28 America/Los_Angeles"
+      "auto_renew_status": "0"
     }
   ]
 }
