@@ -23,6 +23,7 @@ module Monza
     attr_reader :expires_date_pst
     attr_reader :is_trial_period
     attr_reader :is_in_intro_offer_period
+    attr_reader :subscription_group_identifier
     attr_reader :cancellation_date
 
     def initialize(attributes)
@@ -60,6 +61,9 @@ module Monza
       end
       if attributes['is_in_intro_offer_period']
         @is_in_intro_offer_period = attributes['is_in_intro_offer_period'].to_bool
+      end
+      if attributes['subscription_group_identifier']
+        @subscription_group_identifier = attributes['subscription_group_identifier']
       end
       if attributes['cancellation_date']
         @cancellation_date = DateTime.parse(attributes['cancellation_date'])
