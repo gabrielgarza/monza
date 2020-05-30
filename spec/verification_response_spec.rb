@@ -121,6 +121,45 @@ describe Monza::VerificationResponse do
         it { is_expected.to be false }
       end
     end
+
+    context 'when the receipts are not in order and the newest one is not the last' do
+      let(:verify) do
+        response["receipt"]["in_app"].each do |in_app|
+          replace_expires_date(in_app, 4.days.from_now)
+        end
+        response["latest_receipt_info"].each do |lri|
+          replace_expires_date(lri, 4.days.from_now)
+        end
+
+        # If this is the last receipt, change the expires date
+        replace_expires_date(response["latest_receipt_info"].last, 4.days.ago)
+
+        described_class.new(response)
+      end
+
+      context 'without cancellation date' do
+        it { is_expected.to be true }
+      end
+
+    end
+
+    context 'when there is no active receipt' do
+      let(:verify) do
+        response["receipt"]["in_app"].each do |in_app|
+          replace_expires_date(in_app, 4.days.ago)
+        end
+        response["latest_receipt_info"].each do |lri|
+          replace_expires_date(lri, 4.days.ago)
+        end
+
+        described_class.new(response)
+      end
+
+      context 'without cancellation date' do
+        it { is_expected.to be false }
+      end
+
+    end
   end
 
   describe 'is_any_subscription_active?' do

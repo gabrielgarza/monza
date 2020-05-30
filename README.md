@@ -41,11 +41,6 @@ You can also pass in `exclude_old_transactions` with value `true` as an option i
 # this checks if latest transaction receipt expiry_date is in today or the future
 response.is_subscription_active? # => true or false
 
-# Check if subscription is active
-# this checks if ANY transaction receipt expiry_date is in today or the future
-# this is helpful in case the most recent transaction was cancelled but the user still has a previous transaction or subscription that is active
-response.is_any_subscription_active? # => true or false
-
 # Returns the active subscription TransactionReceipt or nil
 response.latest_active_transaction_receipt # => TransactionReceipt instance
 
