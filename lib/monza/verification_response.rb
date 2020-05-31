@@ -48,6 +48,7 @@ module Monza
     def latest_active_transaction_receipt
       latest_active_sub = @latest_receipt_info
                           .reject(&:cancellation_date)
+                          .select(&:expires_date_ms)
                           .max_by(&:expires_date_ms)
 
       if latest_active_sub && latest_active_sub.expires_date_ms >= Time.zone.now

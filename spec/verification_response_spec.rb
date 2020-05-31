@@ -192,5 +192,28 @@ describe Monza::VerificationResponse do
       end
     end
 
+    context 'when there is a receipt without an expiration date' do
+      let(:verify) do
+        response['receipt']['in_app'].each do |in_app|
+          replace_expires_date(in_app, 4.days.from_now)
+        end
+        response['latest_receipt_info'].each do |lri|
+          replace_expires_date(lri, 4.days.from_now)
+        end
+
+        # If this is the last receipt, change the expires date to be nil
+        response['latest_receipt_info'].last.merge!(
+          'expires_date' => nil,
+          'expires_date_ms' => nil,
+          'expires_date_pst' => nil
+        )
+
+        described_class.new(response)
+      end
+
+      context 'without cancellation date' do
+        it { is_expected.to be true }
+      end
+    end
   end
 end
