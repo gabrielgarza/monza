@@ -20,7 +20,12 @@ module Monza
 
     attr_reader :auto_renew_product_id
     attr_reader :auto_renew_status
+    attr_reader :auto_renew_status_change_date
+    attr_reader :auto_renew_status_change_date_ms
+    attr_reader :auto_renew_status_change_date_pst
     attr_reader :environment
+    attr_reader :expiration_intent
+
     attr_reader :latest_receipt
 
     attr_reader :notification_type
@@ -58,8 +63,20 @@ module Monza
 
       @auto_renew_product_id = attributes['auto_renew_product_id']
       @auto_renew_status = attributes['auto_renew_status'].to_bool
+      if attributes['auto_renew_status_change_date']
+        @auto_renew_status_change_date = DateTime.parse(attributes['auto_renew_status_change_date'])
+      end
+      if attributes['auto_renew_status_change_date_ms']
+        @auto_renew_status_change_date_ms = Time.zone.at(attributes['auto_renew_status_change_date_ms'].to_i / 1000)
+      end
+      if attributes['auto_renew_status_change_date_pst']
+        @auto_renew_status_change_date_pst = DateTime.parse(attributes['auto_renew_status_change_date_pst'].gsub("America/Los_Angeles", "PST"))
+      end
+      
       @environment = attributes['environment']
-      @latest_receipt = attributes['latest_receipt']
+      @expiration_intent = attributes['expiration_intent']
+
+      @latest_receipt = attributes['latest_receipt'] || attributes['latest_expired_receipt']
       @notification_type = attributes['notification_type']
 
       if attributes['password'] 
