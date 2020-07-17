@@ -1,8 +1,10 @@
+# frozen_string_literal: true
 require 'time'
 
 module Monza
   class StatusResponse
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
+    # https://developer.apple.com/documentation/appstoreservernotifications/responsebody
 
     attr_reader :auto_renew_product_id
     attr_reader :auto_renew_status
@@ -12,6 +14,8 @@ module Monza
     attr_reader :notification_type
     attr_reader :password
 
+    attr_reader :latest_receipt_info
+    attr_reader :renewal_info
     attr_reader :bundle_id
     attr_reader :bvrs
     attr_reader :item_id
@@ -94,6 +98,22 @@ module Monza
       end
       if latest_receipt_info['cancellation_date']
         @cancellation_date = DateTime.parse(latest_receipt_info['cancellation_date'])
+      end
+
+      @latest_receipt_info = []
+      case attributes.dig('unified_receipt', 'latest_receipt_info')
+      when Array
+        attributes.dig('unified_receipt', 'latest_receipt_info').each do |transaction_receipt_attributes|
+          @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
+        end
+      when Hash
+        @latest_receipt_info << TransactionReceipt.new(attributes.dig('unified_receipt', 'latest_receipt_info'))
+      end
+      @renewal_info = []
+      if attributes.dig('unified_receipt', 'pending_renewal_info')
+        attributes.dig('unified_receipt', 'pending_renewal_info').each do |renewal_info_attributes|
+          @renewal_info << RenewalInfo.new(renewal_info_attributes)
+        end
       end
     end    
 
