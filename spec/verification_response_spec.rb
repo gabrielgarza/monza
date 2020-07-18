@@ -59,6 +59,7 @@ describe Monza::VerificationResponse do
       expect(latest_transaction.expires_date_ms).to eq Time.zone.at("1466127148000".to_i / 1000)
 
       expect(latest_transaction.is_trial_period).to eq true
+      expect(latest_transaction.is_in_intro_offer_period).to eq true
       expect(latest_transaction.cancellation_date).to be_nil
     end
   end
