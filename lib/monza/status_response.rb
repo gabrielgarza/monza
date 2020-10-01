@@ -2,6 +2,8 @@ require 'time'
 
 module Monza
   class StatusResponse
+    using BoolTypecasting
+
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
     attr_reader :auto_renew_product_id
