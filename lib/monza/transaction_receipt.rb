@@ -23,6 +23,9 @@ module Monza
     attr_reader :expires_date_pst
     attr_reader :is_trial_period
     attr_reader :cancellation_date
+    attr_reader :cancellation_reason
+    attr_reader :cancellation_date_ms
+    attr_reader :cancellation_date_pst
     attr_reader :is_in_intro_offer_period
 
     def initialize(attributes)
@@ -37,6 +40,10 @@ module Monza
       @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
+      @cancellation_reason = attributes['cancellation_reason'] if attributes['cancellation_reason']
+      @cancellation_date = DateTime.parse(attributes['cancellation_date']) if attributes['cancellation_date']
+      @cancellation_date_ms = Time.zone.at(attributes['cancellation_date_ms'].to_i / 1000) if attributes['cancellation_date_ms']
+      @cancellation_date_pst = DateTime.parse(attributes['cancellation_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['cancellation_date_pst']
 
       if attributes['expires_date']
         begin
@@ -60,9 +67,6 @@ module Monza
       end
       if attributes['is_in_intro_offer_period']
         @is_in_intro_offer_period = attributes['is_in_intro_offer_period'].to_bool
-      end
-      if attributes['cancellation_date']
-        @cancellation_date = DateTime.parse(attributes['cancellation_date'])
       end
     end # end initialize
 
