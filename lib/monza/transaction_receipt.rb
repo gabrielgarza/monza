@@ -22,8 +22,8 @@ module Monza
     attr_reader :expires_date_ms
     attr_reader :expires_date_pst
     attr_reader :is_trial_period
-    attr_reader :cancellation_date
     attr_reader :cancellation_reason
+    attr_reader :cancellation_date
     attr_reader :cancellation_date_ms
     attr_reader :cancellation_date_pst
     attr_reader :is_in_intro_offer_period
