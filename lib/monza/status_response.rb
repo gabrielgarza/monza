@@ -1,17 +1,38 @@
+# frozen_string_literal: true
 require 'time'
 
 module Monza
   class StatusResponse
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
+    # https://developer.apple.com/documentation/appstoreservernotifications/responsebody
+    module Type 
+      CANCEL = 'CANCEL'
+      DID_CHANGE_RENEWAL_PREF = 'DID_CHANGE_RENEWAL_PREF'
+      DID_CHANGE_RENEWAL_STATUS = 'DID_CHANGE_RENEWAL_STATUS'
+      DID_FAIL_TO_RENEW = 'DID_FAIL_TO_RENEW'
+      DID_RECOVER = 'DID_RECOVER'
+      INITIAL_BUY = 'INITIAL_BUY'
+      INTERACTIVE_RENEWAL = 'INTERACTIVE_RENEWAL'
+      RENEWAL = 'RENEWAL'
+      REFUND = 'REFUND'
+    end
+
 
     attr_reader :auto_renew_product_id
     attr_reader :auto_renew_status
+    attr_reader :auto_renew_status_change_date
+    attr_reader :auto_renew_status_change_date_ms
+    attr_reader :auto_renew_status_change_date_pst
     attr_reader :environment
+    attr_reader :expiration_intent
+
     attr_reader :latest_receipt
 
     attr_reader :notification_type
     attr_reader :password
 
+    attr_reader :latest_receipt_info
+    attr_reader :renewal_info
     attr_reader :bundle_id
     attr_reader :bvrs
     attr_reader :item_id
@@ -42,8 +63,20 @@ module Monza
 
       @auto_renew_product_id = attributes['auto_renew_product_id']
       @auto_renew_status = attributes['auto_renew_status'].to_bool
+      if attributes['auto_renew_status_change_date']
+        @auto_renew_status_change_date = DateTime.parse(attributes['auto_renew_status_change_date'])
+      end
+      if attributes['auto_renew_status_change_date_ms']
+        @auto_renew_status_change_date_ms = Time.zone.at(attributes['auto_renew_status_change_date_ms'].to_i / 1000)
+      end
+      if attributes['auto_renew_status_change_date_pst']
+        @auto_renew_status_change_date_pst = DateTime.parse(attributes['auto_renew_status_change_date_pst'].gsub("America/Los_Angeles", "PST"))
+      end
+      
       @environment = attributes['environment']
-      @latest_receipt = attributes['latest_receipt']
+      @expiration_intent = attributes['expiration_intent']
+
+      @latest_receipt = attributes['latest_receipt'] || attributes['latest_expired_receipt']
       @notification_type = attributes['notification_type']
 
       if attributes['password'] 
@@ -95,12 +128,64 @@ module Monza
       if latest_receipt_info['cancellation_date']
         @cancellation_date = DateTime.parse(latest_receipt_info['cancellation_date'])
       end
+
+      @latest_receipt_info = []
+      case attributes.dig('unified_receipt', 'latest_receipt_info')
+      when Array
+        attributes.dig('unified_receipt', 'latest_receipt_info').each do |transaction_receipt_attributes|
+          @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
+        end
+      when Hash
+        @latest_receipt_info << TransactionReceipt.new(attributes.dig('unified_receipt', 'latest_receipt_info'))
+      end
+      @renewal_info = []
+      if attributes.dig('unified_receipt', 'pending_renewal_info')
+        attributes.dig('unified_receipt', 'pending_renewal_info').each do |renewal_info_attributes|
+          @renewal_info << RenewalInfo.new(renewal_info_attributes)
+        end
+      end
     end    
 
     def date_for_pacific_time pt
       # The field is labelled "PST" by apple, but the "America/Los_Angelus" time zone is actually Pacific Time, 
       # which is different, because it observes DST.
       ActiveSupport::TimeZone["Pacific Time (US & Canada)"].parse(pt).to_datetime
+    end
+
+    def cancel?
+      notification_type == Type::CANCEL
+    end
+
+    def did_change_renewal_pref?
+      notification_type == Type::DID_CHANGE_RENEWAL_PREF
+    end
+
+    def did_change_renewal_status?
+      notification_type == Type::DID_CHANGE_RENEWAL_STATUS
+    end
+
+    def did_fail_to_renew?
+      notification_type == Type::DID_FAIL_TO_RENEW
+    end
+
+    def did_recover?
+      notification_type == Type::DID_RECOVER
+    end
+
+    def initial_buy?
+      notification_type == Type::INITIAL_BUY
+    end
+
+    def interactive_renewal?
+      notification_type == Type::INTERACTIVE_RENEWAL
+    end
+
+    def renewal?
+      notification_type == Type::RENEWAL
+    end
+
+    def refund?
+      notification_type == Type::REFUND
     end
 
   end # class
