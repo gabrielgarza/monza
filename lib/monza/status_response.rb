@@ -3,6 +3,8 @@ require 'time'
 
 module Monza
   class StatusResponse
+    using BoolTypecasting
+
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
     # https://developer.apple.com/documentation/appstoreservernotifications/responsebody
     module Type 
