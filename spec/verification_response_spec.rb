@@ -61,6 +61,8 @@ describe Monza::VerificationResponse do
       expect(latest_transaction.is_trial_period).to eq true
       expect(latest_transaction.is_in_intro_offer_period).to eq true
       expect(latest_transaction.cancellation_date).to be_nil
+
+      expect(latest_transaction.original_attributes).to be_present
     end
   end
 

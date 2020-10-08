@@ -24,8 +24,10 @@ module Monza
     attr_reader :is_trial_period
     attr_reader :cancellation_date
     attr_reader :is_in_intro_offer_period
+    attr_reader :original_attributes
 
     def initialize(attributes)
+      @original_attributes = attributes
       @quantity = attributes['quantity'].to_i
       @product_id = attributes['product_id']
       @transaction_id = attributes['transaction_id']
