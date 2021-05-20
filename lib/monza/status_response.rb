@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'time'
 
 module Monza
@@ -7,7 +8,7 @@ module Monza
 
     # https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
     # https://developer.apple.com/documentation/appstoreservernotifications/responsebody
-    module Type 
+    module Type
       CANCEL = 'CANCEL'
       DID_CHANGE_RENEWAL_PREF = 'DID_CHANGE_RENEWAL_PREF'
       DID_CHANGE_RENEWAL_STATUS = 'DID_CHANGE_RENEWAL_STATUS'
@@ -18,7 +19,6 @@ module Monza
       RENEWAL = 'RENEWAL'
       REFUND = 'REFUND'
     end
-
 
     attr_reader :auto_renew_product_id
     attr_reader :auto_renew_status
@@ -78,20 +78,26 @@ module Monza
       @environment = attributes['environment']
       @expiration_intent = attributes['expiration_intent']
 
-      @latest_receipt = attributes['latest_receipt'] || attributes['latest_expired_receipt']
+      @latest_receipt = attributes.dig('unified_receipt', 'latest_receipt')
       @notification_type = attributes['notification_type']
 
-      if attributes['password'] 
-        @password = attributes['password'] 
+      @password = attributes['password'] if attributes['password']
+
+      latest_receipt_info = []
+      case attributes.dig('unified_receipt', 'latest_receipt_info')
+      when Array
+        attributes.dig('unified_receipt', 'latest_receipt_info').each do |transaction_receipt_attributes|
+          latest_receipt_info << transaction_receipt_attributes
+        end
+      when Hash
+        latest_receipt_info << attributes.dig('unified_receipt', 'latest_receipt_info')
+      end
+      @renewal_info = []
+      attributes.dig('unified_receipt', 'pending_renewal_info')&.each do |renewal_info_attributes|
+        renewal_info << RenewalInfo.new(renewal_info_attributes)
       end
 
-      # There'll only be one latest receipt info, so lets just flatten it out here
-      latest_receipt_info = attributes['latest_receipt_info']
-
-      # If the receipt is cancelled / expired, we'll get this instead
-      if latest_receipt_info.nil?
-        latest_receipt_info = attributes['latest_expired_receipt_info']
-      end
+      latest_receipt_info = latest_receipt_info.first
 
       @bundle_id = latest_receipt_info['bid']
       @bvrs = latest_receipt_info['bvrs'].to_i
@@ -101,10 +107,16 @@ module Monza
       @original_transaction_id = latest_receipt_info['original_transaction_id']
       @purchase_date = DateTime.parse(latest_receipt_info['purchase_date']) if latest_receipt_info['purchase_date']
       @purchase_date_ms = Time.zone.at(latest_receipt_info['purchase_date_ms'].to_i / 1000)
-      @purchase_date_pst = date_for_pacific_time(latest_receipt_info['purchase_date_pst']) if latest_receipt_info['purchase_date_pst']
-      @original_purchase_date = DateTime.parse(latest_receipt_info['original_purchase_date']) if latest_receipt_info['original_purchase_date']
-      @original_purchase_date_ms = Time.zone.at(latest_receipt_info['original_purchase_date_ms'].to_i / 1000) 
-      @original_purchase_date_pst = date_for_pacific_time(latest_receipt_info['original_purchase_date_pst']) if latest_receipt_info['original_purchase_date_pst']
+      if latest_receipt_info['purchase_date_pst']
+        @purchase_date_pst = date_for_pacific_time(latest_receipt_info['purchase_date_pst'])
+      end
+      if latest_receipt_info['original_purchase_date']
+        @original_purchase_date = DateTime.parse(latest_receipt_info['original_purchase_date'])
+      end
+      @original_purchase_date_ms = Time.zone.at(latest_receipt_info['original_purchase_date_ms'].to_i / 1000)
+      if latest_receipt_info['original_purchase_date_pst']
+        @original_purchase_date_pst = date_for_pacific_time(latest_receipt_info['original_purchase_date_pst'])
+      end
       @web_order_line_item_id = latest_receipt_info['web_order_line_item_id']
       @quantity = latest_receipt_info['quantity'].to_i
       
@@ -116,10 +128,14 @@ module Monza
         @expires_date = DateTime.parse(latest_receipt_info['expires_date_formatted'])
       end
       if latest_receipt_info['expires_date']
-        @expires_date_ms = Time.zone.at(latest_receipt_info['expires_date'].to_i / 1000)
+        @expires_date_ms = if latest_receipt_info['expires_date'].size == 13
+                             Time.zone.at(latest_receipt_info['expires_date'].to_i / 1000)
+                           else
+                             DateTime.parse(latest_receipt_info['expires_date'])
+                           end
       end
       if latest_receipt_info['expires_date_formatted_pst']
-        @expires_date_pst = date_for_pacific_time(latest_receipt_info['expires_date_formatted_pst'])
+        @expires_date_pst = date_for_pacific_time(latest_receipt_info['expires_date_formatted_pst'] || latest_receipt_info['expires_date_pst'])
       end
       if latest_receipt_info['is_in_intro_offer_period']
         @is_in_intro_offer_period = latest_receipt_info['is_in_intro_offer_period'].to_bool
@@ -189,7 +205,6 @@ module Monza
     def refund?
       notification_type == Type::REFUND
     end
-
   end # class
 end # module
 
@@ -199,29 +214,31 @@ end # module
 #     "auto_renew_product_id": "product_id.quarterly",
 #     "auto_renew_status": "true",
 #     "environment": "Sandbox",
+#     "unified_receipt": {
+#         "latest_receipt_info": {
+#           "bid": "co.bundle.id",
+#           "bvrs": "1004",
+#           "expires_date": "1521161603000",
+#           "expires_date_formatted": "2018-03-16 00:53:23 Etc/GMT",
+#           "expires_date_formatted_pst": "2018-03-15 17:53:23 America/Los_Angeles",
+#           "is_in_intro_offer_period": "false",
+#           "is_trial_period": "false",
+#           "item_id": "1359908036",
+#           "original_purchase_date": "2018-03-15 23:23:05 Etc/GMT",
+#           "original_purchase_date_ms": "1521156185000",
+#           "original_purchase_date_pst": "2018-03-15 16:23:05 America/Los_Angeles",
+#           "original_transaction_id": "1000000383185294",
+#           "product_id": "product_id.quarterly",
+#           "purchase_date": "2018-03-16 00:38:23 Etc/GMT",
+#           "purchase_date_ms": "1521160703000",
+#           "purchase_date_pst": "2018-03-15 17:38:23 America/Los_Angeles",
+#           "quantity": "1",
+#           "transaction_id": "1000000383189543",
+#           "unique_identifier": "3a142176fee52ba64ddc3ba3b685786bd58cb4fe",
+#           "unique_vendor_identifier": "D8E8B1EB-7A35-4E88-A21C-584E4FEB6543",
+#           "web_order_line_item_id": "1000000038128465"
+#          },
 #     "latest_receipt": "<base 64>",
-#     "latest_receipt_info": {
-#         "bid": "co.bundle.id",
-#         "bvrs": "1004",
-#         "expires_date": "1521161603000",
-#         "expires_date_formatted": "2018-03-16 00:53:23 Etc/GMT",
-#         "expires_date_formatted_pst": "2018-03-15 17:53:23 America/Los_Angeles",
-#         "is_in_intro_offer_period": "false",
-#         "is_trial_period": "false",
-#         "item_id": "1359908036",
-#         "original_purchase_date": "2018-03-15 23:23:05 Etc/GMT",
-#         "original_purchase_date_ms": "1521156185000",
-#         "original_purchase_date_pst": "2018-03-15 16:23:05 America/Los_Angeles",
-#         "original_transaction_id": "1000000383185294",
-#         "product_id": "product_id.quarterly",
-#         "purchase_date": "2018-03-16 00:38:23 Etc/GMT",
-#         "purchase_date_ms": "1521160703000",
-#         "purchase_date_pst": "2018-03-15 17:38:23 America/Los_Angeles",
-#         "quantity": "1",
-#         "transaction_id": "1000000383189543",
-#         "unique_identifier": "3a142176fee52ba64ddc3ba3b685786bd58cb4fe",
-#         "unique_vendor_identifier": "D8E8B1EB-7A35-4E88-A21C-584E4FEB6543",
-#         "web_order_line_item_id": "1000000038128465"
 #     },
 #     "notification_type": "RENEWAL",
 #     "password": "password"
