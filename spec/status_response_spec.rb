@@ -59,11 +59,7 @@ describe Monza::StatusResponse do
     it { expect(status_update.notification_type).to eq Monza::StatusResponse::Type::RENEWAL }
     it { expect(status_update.password).to eq '[FILTERED]' }
     
-    it { expect(status_update.bundle_id).to eq 'co.bundle.id' }
-    it { expect(status_update.bvrs).to eq 84 }
-    it { expect(status_update.item_id).to eq 1521532333 }
-    
-    it { expect(status_update.transaction_id).to eq "1000000717717744" }
+    it { expect(status_update.transaction_id).to eq "1000000707558300" }
     it { expect(status_update.original_transaction_id).to eq "1000000715982567" }
 
     purchase_date = DateTime.parse('2020-07-16 14:36:42 Etc/GMT')
@@ -76,16 +72,9 @@ describe Monza::StatusResponse do
     it { expect(status_update.original_purchase_date_ms).to eq original_purchase_date }
     it { expect(status_update.original_purchase_date_pst).to eq original_purchase_date }
         
-    expires_date = DateTime.parse('2020-07-16 14:41:42 Etc/GMT')
-    it { expect(status_update.expires_date).to eq expires_date }
-    it { expect(status_update.expires_date_ms).to eq expires_date }
-    it { expect(status_update.expires_date_pst).to eq expires_date }
-
     it { expect(status_update.cancellation_date).to eq nil }
-    it { expect(status_update.web_order_line_item_id).to eq '1000000077847029' }
+    it { expect(status_update.web_order_line_item_id).to eq '1000000055398502' }
     it { expect(status_update.quantity).to eq 1 }
-    it { expect(status_update.unique_identifier).to eq '3a142176fee52ba64ddc3ba3b685786bd58cb4fe' }
-    it { expect(status_update.unique_vendor_identifier).to eq 'D8E8B1EB-7A35-4E88-A21C-584E4FEB6543' }
     it { expect(status_update.is_in_intro_offer_period).to eq false }
     it { expect(status_update.is_trial_period).to eq false }
 
