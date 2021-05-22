@@ -20,15 +20,15 @@ module Monza
       @receipt = Receipt.new(attributes['receipt'])
       @latest_receipt_info = []
 
-      lri = attributes['latest_receipt_info'] || attributes.dig('unified_receipt', 'latest_receipt_info')
+      latest_receipt_info = attributes['latest_receipt_info'] || attributes.dig('unified_receipt', 'latest_receipt_info')
 
-      case lri
+      case latest_receipt_info
       when Array
-        lri.each do |transaction_receipt_attributes|
+        latest_receipt_info.each do |transaction_receipt_attributes|
           @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
         end
       when Hash
-        @latest_receipt_info << TransactionReceipt.new(lri)
+        @latest_receipt_info << TransactionReceipt.new(latest_receipt_info)
       end
       @renewal_info = []
       if attributes['pending_renewal_info']
