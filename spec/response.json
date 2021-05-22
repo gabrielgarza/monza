@@ -40,7 +40,6 @@
       }
     ]
   },
-  "unified_receipt": {
   "latest_receipt_info": [
     {
       "quantity": "1",
@@ -93,9 +92,8 @@
       "is_trial_period": "true",
       "is_in_intro_offer_period": "true"
     }
-    ],
-  "latest_receipt": "base 64 string"
-  },
+  ],
+  "latest_receipt": "base 64 string",
   "pending_renewal_info": [
     {
       "expiration_intent": "1",

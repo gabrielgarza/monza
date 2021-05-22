@@ -19,13 +19,16 @@ module Monza
       @environment = attributes['environment']
       @receipt = Receipt.new(attributes['receipt'])
       @latest_receipt_info = []
-      case attributes.dig('unified_receipt', 'latest_receipt_info')
+
+      lri = attributes['latest_receipt_info'] || attributes.dig('unified_receipt', 'latest_receipt_info')
+
+      case lri
       when Array
-        attributes.dig('unified_receipt', 'latest_receipt_info').each do |transaction_receipt_attributes|
+        lri.each do |transaction_receipt_attributes|
           @latest_receipt_info << TransactionReceipt.new(transaction_receipt_attributes)
         end
       when Hash
-        @latest_receipt_info << TransactionReceipt.new(attributes.dig('unified_receipt', 'latest_receipt_info'))
+        @latest_receipt_info << TransactionReceipt.new(lri)
       end
       @renewal_info = []
       if attributes['pending_renewal_info']
@@ -33,7 +36,7 @@ module Monza
           @renewal_info << RenewalInfo.new(renewal_info_attributes)
         end
       end
-      @latest_receipt = attributes.dig('unified_receipt', 'latest_receipt')
+      @latest_receipt = attributes['latest_receipt'] || attributes.dig('unified_receipt', 'latest_receipt')
     end
 
     def is_subscription_active?
@@ -138,28 +141,26 @@ end # module
 #       }
 #     ]
 #   },
-#   "unified_receipt": {
-#     "latest_receipt_info": [
-#       {
-#         "quantity": "1",
-#         "product_id": "product_id",
-#         "transaction_id": "1000000218147500",
-#         "original_transaction_id": "1000000218147500",
-#         "purchase_date": "2016-06-17 01:27:28 Etc/GMT",
-#         "purchase_date_ms": "1466126848000",
-#         "purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
-#         "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
-#         "original_purchase_date_ms": "1466126848000",
-#         "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
-#         "expires_date": "2016-06-17 01:32:28 Etc/GMT",
-#         "expires_date_ms": "1466127148000",
-#         "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
-#         "web_order_line_item_id": "1000000032727765",
-#         "is_trial_period": "true"
-#       }
-#     ],
-#     "latest_receipt": "base 64",
-#   }
+#   "latest_receipt_info": [
+#     {
+#       "quantity": "1",
+#       "product_id": "product_id",
+#       "transaction_id": "1000000218147500",
+#       "original_transaction_id": "1000000218147500",
+#       "purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+#       "purchase_date_ms": "1466126848000",
+#       "purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+#       "original_purchase_date": "2016-06-17 01:27:28 Etc/GMT",
+#       "original_purchase_date_ms": "1466126848000",
+#       "original_purchase_date_pst": "2016-06-16 18:27:28 America/Los_Angeles",
+#       "expires_date": "2016-06-17 01:32:28 Etc/GMT",
+#       "expires_date_ms": "1466127148000",
+#       "expires_date_pst": "2016-06-16 18:32:28 America/Los_Angeles",
+#       "web_order_line_item_id": "1000000032727765",
+#       "is_trial_period": "true"
+#     }
+#   ],
+#   "latest_receipt": "base 64",
 #   "pending_renewal_info": [
 #     {
 #       "expiration_intent": "1",

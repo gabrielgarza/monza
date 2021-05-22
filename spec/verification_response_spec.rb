@@ -110,7 +110,7 @@ describe Monza::VerificationResponse do
         response["receipt"]["in_app"].each do |in_app|
           replace_expires_date(in_app, 4.days.from_now)
         end
-        response.dig('unified_receipt', 'latest_receipt_info').each do |lri|
+        response["latest_receipt_info"].each do |lri|
           replace_expires_date(lri, 4.days.from_now)
         end
 
@@ -143,7 +143,7 @@ describe Monza::VerificationResponse do
         response["receipt"]["in_app"].each do |in_app|
           replace_expires_date(in_app, 4.days.from_now)
         end
-        response.dig('unified_receipt', 'latest_receipt_info').each do |lri|
+        response["latest_receipt_info"].each do |lri|
           replace_expires_date(lri, 4.days.from_now)
         end
 
@@ -166,12 +166,12 @@ describe Monza::VerificationResponse do
         response['receipt']['in_app'].each do |in_app|
           replace_expires_date(in_app, 4.days.from_now)
         end
-        response.dig('unified_receipt', 'latest_receipt_info').each do |lri|
+        response['latest_receipt_info'].each do |lri|
           replace_expires_date(lri, 4.days.from_now)
         end
 
         # If this is the last receipt, change the expires date
-        replace_expires_date(response.dig('unified_receipt', 'latest_receipt_info').last, 4.days.ago)
+        replace_expires_date(response['latest_receipt_info'].last, 4.days.ago)
 
         described_class.new(response)
       end
@@ -186,7 +186,7 @@ describe Monza::VerificationResponse do
         response['receipt']['in_app'].each do |in_app|
           replace_expires_date(in_app, 4.days.ago)
         end
-        response.dig('unified_receipt', 'latest_receipt_info').each do |lri|
+        response['latest_receipt_info'].each do |lri|
           replace_expires_date(lri, 4.days.ago)
         end
 
@@ -203,12 +203,12 @@ describe Monza::VerificationResponse do
         response['receipt']['in_app'].each do |in_app|
           replace_expires_date(in_app, 4.days.from_now)
         end
-        response.dig('unified_receipt', 'latest_receipt_info').each do |lri|
+        response['latest_receipt_info'].each do |lri|
           replace_expires_date(lri, 4.days.from_now)
         end
 
         # If this is the last receipt, change the expires date to be nil
-        response.dig('unified_receipt', 'latest_receipt_info').last.merge!(
+        response['latest_receipt_info'].last.merge!(
           'expires_date' => nil,
           'expires_date_ms' => nil,
           'expires_date_pst' => nil
