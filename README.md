@@ -46,7 +46,7 @@ response.latest_active_transaction_receipt # => TransactionReceipt instance
 
 # Check most recent expiry date
 # ActiveSupport::TimeWithZone
-response.latest_expiry_date # => Fri, 17 Jun 2016 01:57:28 UTC +00:00
+response.latest_active_transaction_receipt.expires_date_ms # => Fri, 17 Jun 2016 01:57:28 UTC +00:00
 
 ```
 
